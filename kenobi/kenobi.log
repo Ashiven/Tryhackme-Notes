@@ -1,0 +1,244 @@
+Starting Nmap 7.93 ( https://nmap.org ) at 2023-03-08 08:55 CET
+NSE: Loaded 155 scripts for scanning.
+NSE: Script Pre-scanning.
+NSE: Starting runlevel 1 (of 3) scan.
+Initiating NSE at 08:55
+Completed NSE at 08:55, 0.00s elapsed
+NSE: Starting runlevel 2 (of 3) scan.
+Initiating NSE at 08:55
+Completed NSE at 08:55, 0.00s elapsed
+NSE: Starting runlevel 3 (of 3) scan.
+Initiating NSE at 08:55
+Completed NSE at 08:55, 0.00s elapsed
+Initiating Parallel DNS resolution of 1 host. at 08:55
+Completed Parallel DNS resolution of 1 host. at 08:55, 0.00s elapsed
+Initiating SYN Stealth Scan at 08:55
+Scanning 10.10.245.63 [65535 ports]
+Discovered open port 111/tcp on 10.10.245.63
+Discovered open port 445/tcp on 10.10.245.63
+Discovered open port 139/tcp on 10.10.245.63
+Discovered open port 80/tcp on 10.10.245.63
+Discovered open port 22/tcp on 10.10.245.63
+Discovered open port 21/tcp on 10.10.245.63
+Discovered open port 36347/tcp on 10.10.245.63
+Discovered open port 60119/tcp on 10.10.245.63
+Discovered open port 59273/tcp on 10.10.245.63
+Discovered open port 57693/tcp on 10.10.245.63
+Discovered open port 2049/tcp on 10.10.245.63
+Completed SYN Stealth Scan at 08:56, 43.88s elapsed (65535 total ports)
+Initiating Service scan at 08:56
+Scanning 11 services on 10.10.245.63
+Completed Service scan at 08:56, 11.34s elapsed (11 services on 1 host)
+Initiating OS detection (try #1) against 10.10.245.63
+Retrying OS detection (try #2) against 10.10.245.63
+Retrying OS detection (try #3) against 10.10.245.63
+Retrying OS detection (try #4) against 10.10.245.63
+Retrying OS detection (try #5) against 10.10.245.63
+Initiating Traceroute at 08:57
+Completed Traceroute at 08:57, 0.05s elapsed
+Initiating Parallel DNS resolution of 2 hosts. at 08:57
+Completed Parallel DNS resolution of 2 hosts. at 08:57, 0.00s elapsed
+NSE: Script scanning 10.10.245.63.
+NSE: Starting runlevel 1 (of 3) scan.
+Initiating NSE at 08:57
+Completed NSE at 08:57, 1.61s elapsed
+NSE: Starting runlevel 2 (of 3) scan.
+Initiating NSE at 08:57
+Completed NSE at 08:57, 0.45s elapsed
+NSE: Starting runlevel 3 (of 3) scan.
+Initiating NSE at 08:57
+Completed NSE at 08:57, 0.00s elapsed
+Nmap scan report for 10.10.245.63
+Host is up, received user-set (0.040s latency).
+Scanned at 2023-03-08 08:55:55 CET for 70s
+Not shown: 65524 closed tcp ports (reset)
+PORT      STATE SERVICE     REASON         VERSION
+21/tcp    open  ftp         syn-ack ttl 63 ProFTPD 1.3.5
+22/tcp    open  ssh         syn-ack ttl 63 OpenSSH 7.2p2 Ubuntu 4ubuntu2.7 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 b3ad834149e95d168d3b0f057be2c0ae (RSA)
+| ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC8m00IxH/X5gfu6Cryqi5Ti2TKUSpqgmhreJsfLL8uBJrGAKQApxZ0lq2rKplqVMs+xwlGTuHNZBVeURqvOe9MmkMUOh4ZIXZJ9KNaBoJb27fXIvsS6sgPxSUuaeoWxutGwHHCDUbtqHuMAoSE2Nwl8G+VPc2DbbtSXcpu5c14HUzktDmsnfJo/5TFiRuYR0uqH8oDl6Zy3JSnbYe/QY+AfTpr1q7BDV85b6xP97/1WUTCw54CKUTV25Yc5h615EwQOMPwox94+48JVmgE00T4ARC3l6YWibqY6a5E8BU+fksse35fFCwJhJEk6xplDkeauKklmVqeMysMWdiAQtDj
+|   256 f8277d642997e6f865546522f7c81d8a (ECDSA)
+| ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBBpJvoJrIaQeGsbHE9vuz4iUyrUahyfHhN7wq9z3uce9F+Cdeme1O+vIfBkmjQJKWZ3vmezLSebtW3VRxKKH3n8=
+|   256 5a06edebb6567e4c01ddeabcbafa3379 (ED25519)
+|_ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGB22m99Wlybun7o/h9e6Ea/9kHMT0Dz2GqSodFqIWDi
+80/tcp    open  http        syn-ack ttl 63 Apache httpd 2.4.18 ((Ubuntu))
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+| http-robots.txt: 1 disallowed entry 
+|_/admin.html
+|_http-title: Site doesn't have a title (text/html).
+|_http-server-header: Apache/2.4.18 (Ubuntu)
+111/tcp   open  rpcbind     syn-ack ttl 63 2-4 (RPC #100000)
+| rpcinfo: 
+|   program version    port/proto  service
+|   100000  2,3,4        111/tcp   rpcbind
+|   100000  2,3,4        111/udp   rpcbind
+|   100000  3,4          111/tcp6  rpcbind
+|   100000  3,4          111/udp6  rpcbind
+|   100003  2,3,4       2049/tcp   nfs
+|   100003  2,3,4       2049/tcp6  nfs
+|   100003  2,3,4       2049/udp   nfs
+|   100003  2,3,4       2049/udp6  nfs
+|   100005  1,2,3      40818/udp   mountd
+|   100005  1,2,3      41379/tcp6  mountd
+|   100005  1,2,3      50983/udp6  mountd
+|   100005  1,2,3      59273/tcp   mountd
+|   100021  1,3,4      36347/tcp   nlockmgr
+|   100021  1,3,4      42845/tcp6  nlockmgr
+|   100021  1,3,4      57165/udp6  nlockmgr
+|   100021  1,3,4      58708/udp   nlockmgr
+|   100227  2,3         2049/tcp   nfs_acl
+|   100227  2,3         2049/tcp6  nfs_acl
+|   100227  2,3         2049/udp   nfs_acl
+|_  100227  2,3         2049/udp6  nfs_acl
+139/tcp   open  netbios-ssn syn-ack ttl 63 Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+445/tcp   open  netbios-ssn syn-ack ttl 63 Samba smbd 4.3.11-Ubuntu (workgroup: WORKGROUP)
+2049/tcp  open  nfs_acl     syn-ack ttl 63 2-3 (RPC #100227)
+36347/tcp open  nlockmgr    syn-ack ttl 63 1-4 (RPC #100021)
+57693/tcp open  mountd      syn-ack ttl 63 1-3 (RPC #100005)
+59273/tcp open  mountd      syn-ack ttl 63 1-3 (RPC #100005)
+60119/tcp open  mountd      syn-ack ttl 63 1-3 (RPC #100005)
+No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).
+TCP/IP fingerprint:
+OS:SCAN(V=7.93%E=4%D=3/8%OT=21%CT=1%CU=30521%PV=Y%DS=2%DC=T%G=Y%TM=64083FD1
+OS:%P=x86_64-pc-linux-gnu)SEQ(SP=F6%GCD=1%ISR=FC%TI=Z%CI=I%II=I%TS=8)SEQ(SP
+OS:=F7%GCD=1%ISR=FC%TI=Z%II=I%TS=8)OPS(O1=M506ST11NW7%O2=M506ST11NW7%O3=M50
+OS:6NNT11NW7%O4=M506ST11NW7%O5=M506ST11NW7%O6=M506ST11)WIN(W1=68DF%W2=68DF%
+OS:W3=68DF%W4=68DF%W5=68DF%W6=68DF)ECN(R=Y%DF=Y%T=40%W=6903%O=M506NNSNW7%CC
+OS:=Y%Q=)T1(R=Y%DF=Y%T=40%S=O%A=S+%F=AS%RD=0%Q=)T2(R=N)T3(R=N)T4(R=Y%DF=Y%T
+OS:=40%W=0%S=A%A=Z%F=R%O=%RD=0%Q=)T5(R=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=
+OS:0%Q=)T6(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F=R%O=%RD=0%Q=)T7(R=Y%DF=Y%T=40%W=0%S=
+OS:Z%A=S+%F=AR%O=%RD=0%Q=)U1(R=Y%DF=N%T=40%IPL=164%UN=0%RIPL=G%RID=G%RIPCK=
+OS:G%RUCK=G%RUD=G)IE(R=Y%DFI=N%T=40%CD=S)
+
+Uptime guess: 0.004 days (since Wed Mar  8 08:51:55 2023)
+Network Distance: 2 hops
+TCP Sequence Prediction: Difficulty=247 (Good luck!)
+IP ID Sequence Generation: All zeros
+Service Info: Host: KENOBI; OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+Host script results:
+| smb-security-mode: 
+|   account_used: guest
+|   authentication_level: user
+|   challenge_response: supported
+|_  message_signing: disabled (dangerous, but default)
+| p2p-conficker: 
+|   Checking for Conficker.C or higher...
+|   Check 1 (port 22416/tcp): CLEAN (Couldn't connect)
+|   Check 2 (port 38583/tcp): CLEAN (Couldn't connect)
+|   Check 3 (port 31083/udp): CLEAN (Failed to receive data)
+|   Check 4 (port 56859/udp): CLEAN (Failed to receive data)
+|_  0/4 checks are positive: Host is CLEAN or ports are blocked
+| smb2-security-mode: 
+|   311: 
+|_    Message signing enabled but not required
+| smb2-time: 
+|   date: 2023-03-08T07:57:06
+|_  start_date: N/A
+| nbstat: NetBIOS name: KENOBI, NetBIOS user: <unknown>, NetBIOS MAC: 000000000000 (Xerox)
+| Names:
+|   KENOBI<00>           Flags: <unique><active>
+|   KENOBI<03>           Flags: <unique><active>
+|   KENOBI<20>           Flags: <unique><active>
+|   \x01\x02__MSBROWSE__\x02<01>  Flags: <group><active>
+|   WORKGROUP<00>        Flags: <group><active>
+|   WORKGROUP<1d>        Flags: <unique><active>
+|   WORKGROUP<1e>        Flags: <group><active>
+| Statistics:
+|   0000000000000000000000000000000000
+|   0000000000000000000000000000000000
+|_  0000000000000000000000000000
+| smb-os-discovery: 
+|   OS: Windows 6.1 (Samba 4.3.11-Ubuntu)
+|   Computer name: kenobi
+|   NetBIOS computer name: KENOBI\x00
+|   Domain name: \x00
+|   FQDN: kenobi
+|_  System time: 2023-03-08T01:57:06-06:00
+|_clock-skew: mean: 2h00m02s, deviation: 3h27m51s, median: 1s
+
+TRACEROUTE (using port 443/tcp)
+HOP RTT      ADDRESS
+1   35.11 ms 10.18.0.1
+2   35.29 ms 10.10.245.63
+
+NSE: Script Post-scanning.
+NSE: Starting runlevel 1 (of 3) scan.
+Initiating NSE at 08:57
+Completed NSE at 08:57, 0.00s elapsed
+NSE: Starting runlevel 2 (of 3) scan.
+Initiating NSE at 08:57
+Completed NSE at 08:57, 0.00s elapsed
+NSE: Starting runlevel 3 (of 3) scan.
+Initiating NSE at 08:57
+Completed NSE at 08:57, 0.00s elapsed
+Read data files from: /usr/bin/../share/nmap
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 71.43 seconds
+           Raw packets sent: 65882 (2.904MB) | Rcvd: 65760 (2.635MB)
+Starting Nmap 7.93 ( https://nmap.org ) at 2023-03-08 09:00 CET
+Nmap scan report for 10.10.245.63
+Host is up (0.046s latency).
+
+PORT    STATE SERVICE
+445/tcp open  microsoft-ds
+
+Host script results:
+| smb-enum-shares: 
+|   account_used: guest
+|   \\10.10.245.63\IPC$: 
+|     Type: STYPE_IPC_HIDDEN
+|     Comment: IPC Service (kenobi server (Samba, Ubuntu))
+|     Users: 2
+|     Max Users: <unlimited>
+|     Path: C:\tmp
+|     Anonymous access: READ/WRITE
+|     Current user access: READ/WRITE
+|   \\10.10.245.63\anonymous: 
+|     Type: STYPE_DISKTREE
+|     Comment: 
+|     Users: 0
+|     Max Users: <unlimited>
+|     Path: C:\home\kenobi\share
+|     Anonymous access: READ/WRITE
+|     Current user access: READ/WRITE
+|   \\10.10.245.63\print$: 
+|     Type: STYPE_DISKTREE
+|     Comment: Printer Drivers
+|     Users: 0
+|     Max Users: <unlimited>
+|     Path: C:\var\lib\samba\printers
+|     Anonymous access: <none>
+|_    Current user access: <none>
+
+Nmap done: 1 IP address (1 host up) scanned in 5.96 seconds
+Starting Nmap 7.93 ( https://nmap.org ) at 2023-03-08 09:06 CET
+Starting Nmap 7.93 ( https://nmap.org ) at 2023-03-08 09:07 CET
+Nmap scan report for 10.10.245.63
+Host is up (0.036s latency).
+
+PORT    STATE SERVICE
+111/tcp open  rpcbind
+| nfs-ls: Volume /var
+|   access: Read Lookup NoModify NoExtend NoDelete NoExecute
+| PERMISSION  UID  GID  SIZE  TIME                 FILENAME
+| rwxr-xr-x   0    0    4096  2019-09-04T08:53:24  .
+| rwxr-xr-x   0    0    4096  2019-09-04T12:27:33  ..
+| rwxr-xr-x   0    0    4096  2019-09-04T12:09:49  backups
+| rwxr-xr-x   0    0    4096  2019-09-04T10:37:44  cache
+| rwxrwxrwt   0    0    4096  2019-09-04T08:43:56  crash
+| rwxrwsr-x   0    50   4096  2016-04-12T20:14:23  local
+| rwxrwxrwx   0    0    9     2019-09-04T08:41:33  lock
+| rwxrwxr-x   0    108  4096  2019-09-04T10:37:44  log
+| rwxr-xr-x   0    0    4096  2019-01-29T23:27:41  snap
+| rwxr-xr-x   0    0    4096  2019-09-04T08:53:24  www
+|_
+| nfs-showmount: 
+|_  /var *
+| nfs-statfs: 
+|   Filesystem  1K-blocks  Used       Available  Use%  Maxfilesize  Maxlink
+|_  /var        9204224.0  1836536.0  6877092.0  22%   16.0T        32000
+
+Nmap done: 1 IP address (1 host up) scanned in 0.92 seconds

